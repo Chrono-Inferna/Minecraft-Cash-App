@@ -12,25 +12,24 @@ using std::cout;
 using std::endl;
 using std::ios;
 
-// TODO: 4 statuses, input code and see what status is
-// TODO: Type in a code, say if you wanna change
-// TODO: Statuses: Cahsed, issued, unissued
+// TODO: Errors for statuses
 
 // Text file object
 std::fstream g_cashStorage;
 
 int main()
 {
-    // Input variables
-    int menuSelection;
-    int codeStatusCheck = 0;
+    int menuSelection;           // What do you think
+    int codeStatusCheck = 0;     // Input for codeStats
+    int codeStatusEdit = 0;      // Input 1 for codeEdit
+    string codeStatusEditChange; // Input 2 for codeEdit
 
     // Seed the randomness function
     srand(time(NULL));
 
     // Opening hello + menu
     cout << endl
-         << "Welcome to the encryptor!" << endl
+         << "Welcome!" << endl
          << "What would you like to do?" << endl
          << endl;
 
@@ -49,7 +48,7 @@ int main()
         {
         // Read text file case
         case 1:
-            cout << endl;
+            cout << "New code generated!" << endl;
             break;
 
         // Create code case
@@ -60,18 +59,27 @@ int main()
         // Check status of code case
         case 3:
             // Asks for code
-            cout << "Enter the code you want to check" << endl;
+            cout << "Enter the code you want to check:" << endl;
             cin >> codeStatusCheck;
 
             // Prints status
             cout << endl
-                 << "Status: " << checkStatus(codeStatusCheck) << endl
+                 << checkStatus(codeStatusCheck) << endl
                  << endl;
             break;
         // Change status case
         case 4:
-        cout;
+            // Inputs
+            cout << "Enter the code you want to edit the status of:" << endl;
+            cin >> codeStatusEdit;
+            cout << endl
+                 << "Enter what you want to change the status to (Unissued, Issued, Cashed, that exact spelling):" << endl;
+            cin >> codeStatusEditChange;
 
+            // Function complete, error or not
+            cout << endl
+                 << editStatus(codeStatusEdit, codeStatusEditChange) << endl
+                 << endl;
             break;
 
         // Exit program case
@@ -86,6 +94,8 @@ int main()
             break;
         }
     } while (menuSelection != 9);
+
+    return 0;
 }
 
 void options()
@@ -123,14 +133,21 @@ string checkStatus(int codeCheck)
     {
         g_cashStorage >> intCheck;
         g_cashStorage >> status;
-    } while (intCheck != codeCheck);
+    } while (intCheck != codeCheck && g_cashStorage.good());
 
     g_cashStorage.close();
 
-    return status;
+    if (intCheck == codeCheck)
+    {
+        return "Status: " + status;
+    }
+    else
+    {
+        return "There was an error somewhere, try again!";
+    }
 }
 
-void editStats(int codeEdit, string codeEditStats)
+string editStatus(int codeEdit, string codeEditStatus)
 {
     string status; // String to determine the status of unissued, issued, or cashed
     int intCheck;  // Int where the text to check is input
@@ -141,11 +158,11 @@ void editStats(int codeEdit, string codeEditStats)
     {
         g_cashStorage >> intCheck;
         g_cashStorage >> status;
-    } while (intCheck != codeEdit);
+    } while (intCheck != codeEdit && g_cashStorage.good());
 
-    // g_cashStorage.seekg(status.length(), ios::cur);
-
-    status.replace(status.find(status), status.length(), codeEditStats);
+    status.replace(status.find(status), status.length(), codeEditStatus);
 
     g_cashStorage.close();
+
+    return "Test";
 }

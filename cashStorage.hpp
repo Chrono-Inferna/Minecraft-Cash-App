@@ -10,4 +10,4 @@ void createCode();
 
 // Functinos having to do with the status of each code
 string checkStatus(int);
-void editStatus(int);
+string editStatus(int, string);
