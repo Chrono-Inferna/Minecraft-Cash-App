@@ -1,13 +1,13 @@
 #include <fstream>
-#include <string>
+#include <regex>
 #include <cstdlib>
 #include <ctime>
-#include "cashStorage.hpp"
+#include "cashApp.hpp"
 
 // Basically rand() but a larger scope RAND_MAX
 #define rand32() (((unsigned long)rand()) << 16 | rand())
 
-// Using's b/c I'm lazy get out if you don't like it
+// Using's b/c I'm lazy; get out if you don't like it
 using std::cin;
 using std::cout;
 using std::endl;
@@ -183,13 +183,9 @@ string checkStatus(int codeCheck)
     g_cashStorage.close();
 
     if (m_intCheck == codeCheck)
-    {
         return "Status: " + m_status;
-    }
     else
-    {
         return "There was an error somewhere, try again!";
-    }
 }
 
 string editStatus(int codeEdit, string codeEditStatus)
@@ -206,11 +202,16 @@ string editStatus(int codeEdit, string codeEditStatus)
         g_cashStorage >> m_status;
     } while (m_intCheck != codeEdit && g_cashStorage.good());
 
+    // Reopen file object for output
+    g_cashStorage.close();
+    g_cashStorage.open("storage.txt", ios::out);
+
+    // FIXME: Regex? Replace does weird stuff, deletes entire text file
     m_status.replace(m_status.find(m_status), m_status.length(), codeEditStatus);
 
     g_cashStorage.close();
 
-    // TODO: If/else to return error or not
+    // TODO: If/else to return error or not, check for success somehow (maybe not by just reading it)
 
     return "Test";
 }
