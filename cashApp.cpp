@@ -128,17 +128,13 @@ void createCode()
     bool m_duplicate = false; // Bool for whether or not newCode is a duplicate
 
     // New code to be input to the text file
-    unsigned int m_newCode = rand32() % 9999999 + 1000000;
+    unsigned int m_newCode = rand32() % 8999999 + 1000000;
 
     g_cashStorageIn.open("storage.txt");
 
     // Probably pointless, but keeps randomizing until newCode isn't a duplicate
     do
     {
-        // If the code is over 7 digits long, reduce it to 7
-        if (m_newCode > 10000000)
-            m_newCode -= 1000000;
-
         // Keeps looping to find the code until it finds a duplicate or it's the end of the file
         do
         {
